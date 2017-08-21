@@ -1,0 +1,28 @@
+@import '../colors';
+
+.main-toolbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  flex: 1 auto;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 100%;
+}
+
+:host {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/deep/ gridster {
+  background: $impac-dashboard-bg-color !important;
+  //overflow: hidden !important;
+}
+
+/deep/ gridster-grid .row {
+  margin-bottom: inherit !important;
+}

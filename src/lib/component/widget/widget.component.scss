@@ -1,0 +1,44 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: #dddddd;
+  border: 1px solid #444444;
+  float: left;
+}
+
+.widget-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 34px;
+  background-color: grey;
+
+  h3 {
+    color: white;
+    margin: 0 0 0 8px;
+    font-size: 16px;
+  }
+
+  .button-bar {
+    margin-right: 4px;
+
+    .close {
+      width: 25px;
+      height: 25px;
+      line-height: 25px;
+
+      i {
+        font-size: 1em;
+        line-height: 25px;
+      }
+    }
+  }
+}
+
+.widget-body {
+  flex: 1;
+  background-color: white;
+}

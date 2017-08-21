@@ -1,0 +1,28 @@
+/* You can add global styles to this file, and also import other style files */
+
+$mno-dark: #17262d;
+$mno-green: #d1e55c;
+$mno-blue: #00e5f0;
+$mno-purple: #977bf0;
+$mno-grey: #626d6d;
+$mno-light-blue: #abc4c6;
+$mno-light-grey: #e6edee;
+
+$mno-web-green: #47ff00;
+$mno-web-yellow: #fbd925;
+$mno-web-orange: #ff7300;
+$mno-web-pink: #ed1e79;
+$mno-web-grey: #254051;
+
+h1 {
+  color: #369;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 250%;
+}
+
+html, body {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  background-color: $mno-light-grey;
+}

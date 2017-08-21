@@ -1,0 +1,14 @@
+
+<div class="main-toolbar">
+  <gridster [options]="options">
+    <gridster-item [item]="widget" *ngFor="let widget of dashboard">
+      <impac-widget [widget]="widget"></impac-widget>
+      <div class="button-bar">
+        <label>{{widget.label}}</label>
+        <button (mousedown)="removeItem($event, widget)" (touchstart)="removeItem($event, widget)">
+          close
+        </button>
+      </div>
+    </gridster-item>
+  </gridster>
+</div>
