@@ -19,14 +19,9 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "impac",
       "styles": [
-        "styles.scss",
-        "../node_modules/materialize-css/dist/css/materialize.css"
+        "styles.scss"
       ],
-      "scripts": [
-        "../node_modules/jquery/dist/jquery.js",
-        "../node_modules/hammerjs/hammer.js",
-        "../node_modules/materialize-css/dist/js/materialize.js"
-      ],
+      "scripts": [ ],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",

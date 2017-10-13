@@ -1,8 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { MaterializeModule } from 'angular2-materialize';
-
 import { ImpacMaterialModule } from '../../index';
 import { AppComponent } from './app.component';
 
@@ -12,8 +10,7 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    ImpacMaterialModule,
-    MaterializeModule
+    ImpacMaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent]
