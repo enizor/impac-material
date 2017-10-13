@@ -18,11 +18,15 @@
   flex-direction: column;
 }
 
+// Deep CSS change of gridster default
 /deep/ gridster {
   background: $impac-dashboard-bg-color !important;
-  //overflow: hidden !important;
-}
 
-/deep/ gridster-grid .row {
-  margin-bottom: inherit !important;
+  gridster-grid .row {
+    margin-bottom: inherit !important;
+  }
+
+  gridster-item {
+    background: transparent !important;
+  }
 }

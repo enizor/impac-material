@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { GridsterConfig } from 'angular-gridster2';
 
+import { DashboardService } from '../service/dashboard.service';
+import { appInjector } from '../helpers/app-injector';
+
 @Component({
   selector: 'impac-dashboard',
   templateUrl: './dashboard.component.html',
@@ -8,15 +11,11 @@ import { GridsterConfig } from 'angular-gridster2';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardComponent implements OnInit {
-  name = 'Impac!';
 
-  widgets: Array<Object>;
   options: GridsterConfig;
-  dashboard: Array<Object>;
+  widgets: Array<Object>;
 
-  static eventStop(item: any, scope: any) {
-    console.info('eventStop', item, scope);
-  }
+  constructor(public dashboardService: DashboardService) {}
 
   static itemChange(item: any, scope: any) {
     console.info('itemChanged', item, scope);
@@ -43,10 +42,10 @@ export class DashboardComponent implements OnInit {
       pushResizeItems: true, // on resize of item will shrink adjacent items
       compactType: 'none',
       itemChangeCallback: DashboardComponent.itemChange,
-      itemResizeCallback: DashboardComponent.itemResize,
+      itemResizeCallback: this.itemResize,
       outerMargin: true,
       margin: 10,
-      maxCols: 6,
+      maxCols: 24,
       maxItemCols: 4,
       minItemCols: 1,
       maxItemRows: 4,
@@ -65,19 +64,15 @@ export class DashboardComponent implements OnInit {
       }
     };
 
-    this.dashboard = [
-      {cols: 2, rows: 1, y: 0, x: 0, title: 'Cashflow Balance'},
-      {cols: 2, rows: 2, y: 0, x: 2},
-      {cols: 1, rows: 1, y: 0, x: 4},
-      {cols: 1, rows: 1, y: 0, x: 5},
-      {cols: undefined, rows: undefined, y: 1, x: 0},
-      {cols: 1, rows: 1, y: undefined, x: undefined},
-      {cols: 2, rows: 2, y: 1, x: 5, minItemRows: 2, minItemCols: 2, title: 'Min rows & cols = 2'},
-      {cols: 2, rows: 2, y: 2, x: 0, maxItemRows: 2, maxItemCols: 2, title: 'Max rows & cols = 2'},
-      {cols: 2, rows: 1, y: 2, x: 2, dragEnabled: true, resizeEnabled: true, title: 'Drag&Resize Enabled'},
-      {cols: 1, rows: 1, y: 2, x: 4, dragEnabled: false, resizeEnabled: false, title: 'Drag&Resize Disabled'},
-      {cols: 1, rows: 1, y: 0, x: 6, initCallback: DashboardComponent.itemInit}
+    this.widgets = [
+      {cols: 2, rows: 1, y: 0, x: 0, title: 'Cashflow Balance', initCallback: DashboardComponent.itemInit},
+      {cols: 2, rows: 2, y: 0, x: 2, title: 'Payable / Receivable',  initCallback: DashboardComponent.itemInit}
     ];
+  }
+
+  itemResize(item: any, scope: any) {
+    const dashboardService = appInjector().get(DashboardService);
+    dashboardService.redrawWidget(item);
   }
 
   changedOptions() {
@@ -85,10 +80,10 @@ export class DashboardComponent implements OnInit {
   }
 
   removeItem(item: any) {
-    this.dashboard.splice(this.dashboard.indexOf(item), 1);
-  };
+    this.widgets.splice(this.widgets.indexOf(item), 1);
+  }
 
   addItem() {
-    this.dashboard.push({});
-  };
+    this.widgets.push({});
+  }
 }

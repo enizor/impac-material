@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { Injector, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { GridsterModule } from 'angular-gridster2';
@@ -16,6 +16,8 @@ export function highchartsFactory() {
 import { DashboardComponent } from './component/dashboard.component';
 import { WidgetComponent } from './component/widget/widget.component';
 import { LibService } from './service/lib.service';
+import { DashboardService } from './service/dashboard.service';
+import { appInjector } from './helpers/app-injector';
 
 @NgModule({
   imports: [
@@ -26,6 +28,7 @@ import { LibService } from './service/lib.service';
   declarations: [ DashboardComponent, WidgetComponent ],
   providers: [
     LibService,
+    DashboardService,
     {
       provide: HighchartsStatic,
       useFactory: highchartsFactory
@@ -33,4 +36,8 @@ import { LibService } from './service/lib.service';
   ],
   exports: [ DashboardComponent ]
 })
-export class ImpacMaterialModule { }
+export class ImpacMaterialModule {
+  constructor(private injector: Injector) {
+    appInjector(this.injector);
+  }
+}

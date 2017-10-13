@@ -1,12 +1,11 @@
 <div class="widget-header">
   <h3>{{widget.title}}</h3>
   <div class="button-bar">
-    <button class="btn-floating waves-effect waves-light close" (click)="close($event)">
+    <button class="close" (click)="close($event)">
       <i class="material-icons">close</i>
     </button>
   </div>
 </div>
 <div class="widget-body">
-  <chart [options]="options"></chart>
+  <chart [options]="options" (load)="onChartLoad($event)"></chart>
 </div>
-
