@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { GridsterConfig } from 'angular-gridster2';
 
-import { DashboardService } from '../service/dashboard.service';
-import { appInjector } from '../helpers/app-injector';
+import { DashboardService } from '../_service/dashboard.service';
+import { appInjector } from '../_helpers/app-injector';
 
 @Component({
   selector: 'impac-dashboard',
@@ -17,23 +17,20 @@ export class DashboardComponent implements OnInit {
 
   constructor(public dashboardService: DashboardService) {}
 
-  static itemChange(item: any, scope: any) {
-    console.info('itemChanged', item, scope);
-  }
-
-  static itemResize(item: any, scope: any) {
-    console.info('itemResized', item, scope);
+  static eventStop(item: any, scope: any) {
+    // console.info('eventStop', item, scope);
   }
 
   static itemInit(item: any) {
-    console.info('itemInitialized', item);
+    // console.info('itemInitialized', item);
+  }
+
+  static itemChange(item: any, scope: any) {
+    // console.info('itemChanged', item, scope);
   }
 
   ngOnInit() {
-    this.widgets = [
-      { name: 'Cashflow Projection' },
-      { name: 'Account Blance' }
-    ];
+    console.info('### ngOnInit this.dashboardService', this.dashboardService);
 
     this.options = {
       gridType: 'verticalFixed',

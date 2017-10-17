@@ -4,20 +4,17 @@ import { CommonModule } from '@angular/common';
 import { GridsterModule } from 'angular-gridster2';
 import { ChartModule } from 'angular2-highcharts';
 import { HighchartsStatic } from 'angular2-highcharts/dist/HighchartsService';
+import * as highcharts from 'highcharts';
 
 export function highchartsFactory() {
-  const hc = require('highcharts');
-  const dd = require('highcharts/modules/drilldown');
-  dd(hc);
-
-  return hc;
+  return highcharts;
 }
 
-import { DashboardComponent } from './component/dashboard.component';
-import { WidgetComponent } from './component/widget/widget.component';
-import { LibService } from './service/lib.service';
-import { DashboardService } from './service/dashboard.service';
-import { appInjector } from './helpers/app-injector';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { WidgetComponent } from './widget/widget.component';
+import { LibService } from './_service/lib.service';
+import { DashboardService } from './_service/dashboard.service';
+import { appInjector } from './_helpers/app-injector';
 
 @NgModule({
   imports: [

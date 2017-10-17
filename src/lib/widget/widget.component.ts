@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy } from '@angular/core';
 import { ChartEvent } from 'angular2-highcharts/dist/ChartEvent';
 import { ChartObject } from 'highcharts';
-import { DashboardService } from '../../service/dashboard.service';
+import { DashboardService } from '../_service/dashboard.service';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({
@@ -18,6 +18,7 @@ export class WidgetComponent implements OnDestroy {
   options: Object;
 
   constructor(public dashboardService: DashboardService) {
+    // Redraw the chart when a widget is reloaded
     this.widgetSubscription = this.dashboardService.widgetRedrew$.subscribe(
       widget => {
         // Redraw the widget only if this widget is the one that has been redrawn
@@ -37,18 +38,13 @@ export class WidgetComponent implements OnDestroy {
       }
     };
     setInterval(() => {
-        this.chart.series[0].addPoint(Math.random() * 100);
-      }, 2000);
-  }
-
-  public redrawWidget() {
-    console.log('### DEBUG redrawWidget!!!');
+      this.chart.series[0].addPoint(Math.random() * 100);
+    }, 2000);
   }
 
   protected onChartLoad(event: ChartEvent) {
-    // console.log('### DEBUG onChartLoad:', event);
     this.chart = event.context;
-    setTimeout(() => { this.chart.reflow(); }, 200);
+    setTimeout(() => { this.chart.reflow(); }, 20);
   }
 
   protected close (event) {
