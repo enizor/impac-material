@@ -2,13 +2,6 @@ import { Injector, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { GridsterModule } from 'angular-gridster2';
-import { ChartModule } from 'angular2-highcharts';
-import { HighchartsStatic } from 'angular2-highcharts/dist/HighchartsService';
-import * as highcharts from 'highcharts';
-
-export function highchartsFactory() {
-  return highcharts;
-}
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { WidgetComponent } from './widget/widget.component';
@@ -18,16 +11,11 @@ import { appInjector } from './_helpers/app-injector';
 @NgModule({
   imports: [
     CommonModule,
-    GridsterModule,
-    ChartModule
+    GridsterModule
   ],
   declarations: [ DashboardComponent, WidgetComponent ],
   providers: [
-    DashboardService,
-    {
-      provide: HighchartsStatic,
-      useFactory: highchartsFactory
-    }
+    DashboardService
   ],
   exports: [ DashboardComponent ]
 })

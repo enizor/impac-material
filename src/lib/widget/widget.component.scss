@@ -28,9 +28,11 @@
   .widget-body {
     flex: auto;
     height: calc(100% - 2em);
+    background-color: white;
+    border-radius: 0 0 4px 4px;
   }
 
-  chart {
+  .chart-container {
     display: block;
     height: 100% !important;
   }
