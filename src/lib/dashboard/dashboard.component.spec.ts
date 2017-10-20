@@ -22,7 +22,7 @@ describe('LibComponent', function () {
     de = fixture.debugElement.query(By.css('h2'));
   });
 
-  it('should create component', () => expect(comp).toBeDefined());
+  it('should create dashboard', () => expect(comp).toBeDefined());
 
   it('should have expected <h2> text', () => {
     fixture.detectChanges();

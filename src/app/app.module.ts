@@ -1,8 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { ImpacMaterialModule } from '../../index';
 import { AppComponent } from './app.component';
+import { ImpacMaterialModule } from '../lib/impac-material.module';
+
 
 @NgModule({
   declarations: [
@@ -13,6 +14,6 @@ import { AppComponent } from './app.component';
     ImpacMaterialModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [ AppComponent ]
 })
 export class AppModule { }

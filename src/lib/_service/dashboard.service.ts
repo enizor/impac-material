@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class DashboardService {
@@ -10,7 +11,7 @@ export class DashboardService {
   public widgetSource = new Subject<Object>();
 
   // Observable string streams
-  public widgetRedrew$ = this.widgetSource.asObservable();
+  public widgetRedrew$: Observable<Object> = this.widgetSource.asObservable();
 
   // Send a message command to all the widget to redraw themselves
   public redrawWidget(widget: Object) {

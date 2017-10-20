@@ -118,13 +118,15 @@
       true,
       "attribute",
       "app",
-      "camelCase"
+      "camelCase",
+      "impac"
     ],
     "component-selector": [
       true,
       "element",
       "app",
-      "kebab-case"
+      "kebab-case",
+      "impac"
     ],
     "use-input-property-decorator": true,
     "use-output-property-decorator": true,

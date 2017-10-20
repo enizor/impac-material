@@ -12,7 +12,6 @@ export function highchartsFactory() {
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { WidgetComponent } from './widget/widget.component';
-import { LibService } from './_service/lib.service';
 import { DashboardService } from './_service/dashboard.service';
 import { appInjector } from './_helpers/app-injector';
 
@@ -24,7 +23,6 @@ import { appInjector } from './_helpers/app-injector';
   ],
   declarations: [ DashboardComponent, WidgetComponent ],
   providers: [
-    LibService,
     DashboardService,
     {
       provide: HighchartsStatic,
