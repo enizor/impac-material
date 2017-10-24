@@ -1,5 +1,5 @@
 
-export class Widget {
+export interface Widget {
   id: number;
   name: string;
   kpis: Object[];
@@ -8,9 +8,4 @@ export class Widget {
   widget_category: string;
   width: number;
   content: {};
-
-  constructor(parameters: { widget: any }) {
-    let widget = parameters.widget;
-    console.log('widget constructor: ', widget);
-  }
 }
