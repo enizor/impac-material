@@ -1,0 +1,14 @@
+{
+  "$schema": "./node_modules/ng-packagr/ng-package.schema.json",
+  "workingDirectory": ".ng_build",
+  "src": "lib",
+  "dest": "dist",
+  "lib": {
+    "entryFile": "public_api.ts",
+    "externals": {
+      "@ngrx/store": "ngrx.store",
+      "angular-gridster2": "angular-gridster2/dist/index.js",
+      "highcharts": "highcharts"
+    }
+  }
+}

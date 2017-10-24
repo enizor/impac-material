@@ -1,7 +1,8 @@
 import { AfterContentInit, Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
-import { Chart, ChartObject, Options } from 'highcharts';
 import { DashboardService } from '../_service/dashboard.service';
 import { Subscription } from 'rxjs/Subscription';
+
+import Highcharts from 'highcharts/highcharts.js';
 
 @Component({
   selector: 'impac-widget',
@@ -14,8 +15,8 @@ export class WidgetComponent implements AfterContentInit, OnDestroy {
 
   widgetSubscription: Subscription;
 
-  chart: ChartObject;
-  options: Options;
+  chart: Highcharts.ChartObject;
+  options: Highcharts.Options;
 
   constructor(public dashboardService: DashboardService) {}
 
@@ -31,7 +32,7 @@ export class WidgetComponent implements AfterContentInit, OnDestroy {
       }
     };
 
-    this.chart = new Chart(this.chartTarget.nativeElement, this.options, () => {
+    this.chart = new Highcharts.Chart(this.chartTarget.nativeElement, this.options, () => {
       // Redraw the chart when a widget is reloaded
       this.widgetSubscription = this.dashboardService.widgetRedrew$.subscribe(
         widget => {

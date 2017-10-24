@@ -2,7 +2,7 @@ import { Injector, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { StoreModule } from '@ngrx/store';
-import { GridsterModule } from 'angular-gridster2';
+import { GridsterModule } from 'angular-gridster2/dist/index';
 
 import { ContainerComponent } from './container/container.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
