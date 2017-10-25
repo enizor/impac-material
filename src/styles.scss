@@ -14,8 +14,8 @@ $mno-web-orange: #ff7300;
 $mno-web-pink: #ed1e79;
 $mno-web-grey: #254051;
 
-$icon-font-path: '../node_modules/bootstrap-sass/assets/fonts/bootstrap/';
-$fa-font-path : '../node_modules/font-awesome/fonts';
+$icon-font-path: '../node_modules/bootstrap/assets/fonts/bootstrap/';
+$fa-font-path: '../node_modules/font-awesome/fonts';
 
 @import '../node_modules/bootstrap/scss/bootstrap';
 @import '../node_modules/font-awesome/scss/font-awesome';

@@ -8,7 +8,8 @@
     "externals": {
       "@ngrx/store": "ngrx.store",
       "angular-gridster2": "angular-gridster2/dist/index.js",
-      "highcharts": "highcharts"
+      "highcharts": "highcharts",
+      "ngx-bootstrap": "ngx-bootstrap"
     }
   }
 }

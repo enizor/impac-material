@@ -1,9 +1,0 @@
-<div *ngIf="dashboards$ | async as state">
-  <ul>
-    <li *ngFor="let d of state.dashboards">{{d.name}}</li>
-  </ul>
-</div>
-
-<button class="btn btn-primary" (click)="create()">
-  Create a dashboard
-</button>

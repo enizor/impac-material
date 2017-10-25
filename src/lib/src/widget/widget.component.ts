@@ -2,7 +2,7 @@ import { AfterContentInit, Component, ElementRef, Input, OnDestroy, ViewChild } 
 import { DashboardService } from '../_service/dashboard.service';
 import { Subscription } from 'rxjs/Subscription';
 
-import Highcharts from 'highcharts/highcharts.js';
+import * as Highcharts from 'highcharts';
 
 @Component({
   selector: 'impac-widget',
@@ -48,7 +48,7 @@ export class WidgetComponent implements AfterContentInit, OnDestroy {
     });
   }
 
-  public close (event) {
+  public close(event) {
     event.stopPropagation();
     console.log('### DEBUG widget click event');
   }

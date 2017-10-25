@@ -17,6 +17,8 @@ export class Update implements Action {
 
 export class Remove implements Action {
   readonly type = REMOVE;
+
+  constructor(public payload: Dashboard) {}
 }
 
 export type All

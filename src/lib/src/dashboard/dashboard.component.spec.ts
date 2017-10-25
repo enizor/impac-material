@@ -4,7 +4,7 @@ import { DebugElement } from '@angular/core';
 
 import { DashboardComponent } from './dashboard.component';
 
-describe('LibComponent', function () {
+xdescribe('DashboardComponent', function () {
   let de: DebugElement;
   let comp: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;

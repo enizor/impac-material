@@ -2,7 +2,7 @@ import * as DashboardActions from './dashboard.actions';
 import { Dashboard } from '../_model/dashboard.model';
 
 const defaultState: DashboardState = {
-  dashboards: [{name: 'Default Dashboard'}]
+  dashboards: [{name: 'Default Dashboard', active: true}]
 };
 
 export interface DashboardState {
@@ -10,14 +10,12 @@ export interface DashboardState {
 }
 
 export function reducer(state: DashboardState = defaultState, action: DashboardActions.All): DashboardState {
-  console.log('### in dashboardReducer:', action, state);
-
   switch (action.type) {
     case DashboardActions.CREATE:
       return {
         dashboards: [
-          ...state.dashboards,
-          (<DashboardActions.Create> action).payload
+          ...state.dashboards.map((d) => { d.active = false; return d; }),
+          { ...(<DashboardActions.Create> action).payload, active: true }
         ]
       };
 
@@ -25,7 +23,9 @@ export function reducer(state: DashboardState = defaultState, action: DashboardA
       return state;
 
     case DashboardActions.REMOVE:
-      return state;
+      return {
+        dashboards: state.dashboards.filter(e => e !== (<DashboardActions.Remove> action).payload)
+      };
 
     default:
       return state;
