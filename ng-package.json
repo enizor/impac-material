@@ -6,8 +6,10 @@
   "lib": {
     "entryFile": "public_api.ts",
     "externals": {
+      "@ngrx/effects": "ngrx.effects",
       "@ngrx/store": "ngrx.store",
       "angular-gridster2": "angular-gridster2/dist/index.js",
+      "angular2-jsonapi": "angular2-jsonapi",
       "highcharts": "highcharts",
       "ngx-bootstrap": "ngx-bootstrap"
     }

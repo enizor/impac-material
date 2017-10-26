@@ -1,12 +1,12 @@
 import * as DashboardActions from './dashboard.actions';
-import { Dashboard } from '../_model/dashboard.model';
+import { IDashboard } from '../_jsonapi-services/models/dashboard.model';
 
 const defaultState: DashboardState = {
   dashboards: [{name: 'Default Dashboard', active: true}]
 };
 
 export interface DashboardState {
-  dashboards: Dashboard[];
+  dashboards: IDashboard[];
 }
 
 export function reducer(state: DashboardState = defaultState, action: DashboardActions.All): DashboardState {
@@ -14,7 +14,7 @@ export function reducer(state: DashboardState = defaultState, action: DashboardA
     case DashboardActions.CREATE:
       return {
         dashboards: [
-          ...state.dashboards.map((d) => { d.active = false; return d; }),
+          ...state.dashboards.map((db) => { db.active = false; return db; }),
           { ...(<DashboardActions.Create> action).payload, active: true }
         ]
       };

@@ -32,19 +32,19 @@ export class WidgetComponent implements AfterContentInit, OnDestroy {
       }
     };
 
-    this.chart = new Highcharts.Chart(this.chartTarget.nativeElement, this.options, () => {
+    this.chart = new Highcharts.Chart(this.chartTarget.nativeElement, this.options, (chart) => {
       // Redraw the chart when a widget is reloaded
       this.widgetSubscription = this.dashboardService.widgetRedrew$.subscribe(
         widget => {
           // Redraw the widget only if this widget is the one that has been redrawn
           // 300ms is the time the gridster-item adopt its final width/height
-          if (widget === this.widget) { setTimeout(() => { this.chart.reflow(); }, 300); }
+          if (widget === this.widget) { setTimeout(() => { chart.reflow(); }, 300); }
         }
       );
 
       setInterval(() => {
-        this.chart.series[0].addPoint(Math.random() * 100);
-      }, 2000);
+        if (chart.series[0]) { chart.series[0].addPoint(Math.random() * 100); }
+      }, 3000);
     });
   }
 
