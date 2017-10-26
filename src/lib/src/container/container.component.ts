@@ -3,8 +3,8 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
 import { CREATE, REMOVE } from '../_store/dashboard.actions';
-import { DashboardState } from '../_store/dashboard.reducer';
 import * as fromRoot from '../_store/index.reducers';
+import { IDashboard } from '../_jsonapi-services/models/dashboard.model';
 
 @Component({
   selector: 'impac-container',
@@ -13,7 +13,7 @@ import * as fromRoot from '../_store/index.reducers';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContainerComponent implements OnInit {
-  dashboards$: Observable<DashboardState>;
+  dashboards$: Observable<IDashboard[]>;
 
   constructor(private store: Store<fromRoot.State>) {}
 

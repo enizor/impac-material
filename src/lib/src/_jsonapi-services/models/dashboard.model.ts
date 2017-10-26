@@ -2,6 +2,7 @@ import { Attribute, JsonApiModelConfig } from 'angular2-jsonapi';
 import { BaseModel } from './base.model';
 
 export interface IDashboard {
+  id?: string;
   name: string;
   active?: boolean;
 }

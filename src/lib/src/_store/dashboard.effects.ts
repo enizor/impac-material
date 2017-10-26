@@ -19,7 +19,7 @@ export class DashboardEffects {
         // If successful, dispatch success action with result
         .map(data => ({ type: DashboardAction.CREATE_SUCCESS, payload: data }))
         // If request fails, dispatch error action
-        .catch(() => of({ type: DashboardAction.CREATE_ERROR }));
+        .catch((error) => of({ type: DashboardAction.CREATE_ERROR, payload: error }));
     });
 
   constructor(

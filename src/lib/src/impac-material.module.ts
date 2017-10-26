@@ -21,7 +21,7 @@ import {HttpModule} from '@angular/http';
 const optionalImports = [];
 if (!environment.production) {
   // Note that you must instrument after importing StoreModule
-  optionalImports.push(StoreDevtoolsModule.instrument(<StoreDevtoolsOptions>{maxAge: 5}));
+  optionalImports.push(StoreDevtoolsModule.instrument(<StoreDevtoolsOptions>{maxAge: 25}));
 }
 
 @NgModule({

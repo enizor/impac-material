@@ -1,7 +1,7 @@
-<div *ngIf="dashboards$ | async as state" class="row">
+<div *ngIf="dashboards$ | async as dashboards" class="row">
   <div class="col-sm">
     <tabset class="mt-3">
-      <tab *ngFor="let tab of state.dashboards"
+      <tab *ngFor="let tab of dashboards"
            [heading]="tab.name"
            [active]="tab.active"
            (select)="tab.active = true"
