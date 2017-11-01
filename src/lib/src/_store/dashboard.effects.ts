@@ -9,7 +9,7 @@ import * as DashboardAction from './dashboard.actions';
 import { Dashboard } from '../_models/dashboard.model';
 import { of } from 'rxjs/observable/of';
 import { HttpClient } from '@angular/common/http';
-import { JsonapiService } from '../_service/jsonapi-service';
+import { JsonapiService } from '../_ngrx-jsonapi/services/jsonapi-service';
 
 @Injectable()
 export class DashboardEffects {

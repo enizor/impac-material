@@ -1,6 +1,6 @@
-import {JsonApiModelConfig} from '../_decorators/json-api-model-config';
-import {Attribute} from '../_decorators/attribute.decorator';
-import {JsonApiModel} from './json-api-model';
+import { JsonApiModelConfig } from '../_ngrx-jsonapi/decorators/json-api-model-config';
+import { JsonApiModel } from '../_ngrx-jsonapi/models/json-api.model';
+import { Attribute } from '../_ngrx-jsonapi/decorators/attribute.decorator';
 
 @JsonApiModelConfig({
   type: 'dashboards'

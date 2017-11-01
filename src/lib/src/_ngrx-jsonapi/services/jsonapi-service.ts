@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import * as qs from 'qs';
 import { Observable } from 'rxjs/Observable';
-import { ModelConfig} from '../_interfaces/model-config.interface';
-import { JsonApiModel } from '../_models/json-api-model';
-import { JsonApiQueryData } from '../_models/json-api-query-data';
+import { ModelConfig} from '../interfaces/model-config.interface';
+import { JsonApiModel } from '../models/json-api.model';
+import { JsonApiQueryData } from '../models/json-api-query-data';
 
 @Injectable()
 export class JsonapiService {

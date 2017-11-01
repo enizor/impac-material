@@ -19,7 +19,7 @@ import { MnohubDatastore } from './_jsonapi-services/mnohub-datastore';
 import { HttpModule } from '@angular/http';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BasicAuthInterceptor } from './_interceptors/basic-auth-interceptor';
-import { JsonapiService } from './_service/jsonapi-service';
+import { JsonapiService } from './_ngrx-jsonapi/services/jsonapi-service';
 
 const optionalImports = [];
 if (!environment.production) {

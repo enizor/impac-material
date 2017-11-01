@@ -1,5 +1,5 @@
 
-import {JsonApiMetaModel} from '../_models/json-api-meta.model';
+import {JsonApiMetaModel} from '../models/json-api-meta.model';
 
 export interface ModelConfig {
   type: string;
