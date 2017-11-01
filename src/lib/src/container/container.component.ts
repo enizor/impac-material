@@ -2,9 +2,9 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
-import { CREATE, REMOVE } from '../_store/dashboard.actions';
+import { CREATE, INIT, REMOVE } from '../_store/dashboard.actions';
 import * as fromRoot from '../_store/index.reducers';
-import { IDashboard } from '../_jsonapi-services/models/dashboard.model';
+import { Dashboard } from '../_models/dashboard.model';
 
 @Component({
   selector: 'impac-container',
@@ -13,12 +13,13 @@ import { IDashboard } from '../_jsonapi-services/models/dashboard.model';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContainerComponent implements OnInit {
-  dashboards$: Observable<IDashboard[]>;
+  dashboards$: Observable<Dashboard[]>;
 
   constructor(private store: Store<fromRoot.State>) {}
 
   ngOnInit() {
     this.dashboards$ = this.store.select('dashboards');
+    this.store.dispatch({ type: INIT });
   }
 
   createDashboard() {
@@ -26,7 +27,7 @@ export class ContainerComponent implements OnInit {
     this.store.dispatch({ type: CREATE, payload: {name: 'Accounting Dashboard'} });
   }
 
-  deleteDashboard(dashboard) {
+  deleteDashboard(dashboard: Dashboard) {
     console.log('### deleteDashboard', dashboard);
     this.store.dispatch({ type: REMOVE, payload: dashboard });
   }

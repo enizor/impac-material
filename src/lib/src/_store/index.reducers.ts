@@ -1,9 +1,9 @@
 import { ActionReducerMap } from '@ngrx/store';
 import * as fromDashboard from './dashboard.reducer';
-import {IDashboard} from '../_jsonapi-services/models/dashboard.model';
+import { Dashboard } from '../_models/dashboard.model';
 
 export interface State {
-  dashboards: IDashboard[];
+  dashboards: Array<Dashboard>;
 }
 
 export const reducers: ActionReducerMap<State> = {

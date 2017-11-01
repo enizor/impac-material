@@ -30,8 +30,6 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.info('### ngOnInit this.dashboardService', this.dashboardService);
-
     this.options = {
       gridType: 'verticalFixed',
       swap: true,

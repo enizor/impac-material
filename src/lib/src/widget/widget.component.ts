@@ -43,7 +43,7 @@ export class WidgetComponent implements AfterContentInit, OnDestroy {
       );
 
       setInterval(() => {
-        if (chart.series[0]) { chart.series[0].addPoint(Math.random() * 100); }
+        if (chart.series && chart.series[0]) { chart.series[0].addPoint(Math.random() * 100); }
       }, 3000);
     });
   }

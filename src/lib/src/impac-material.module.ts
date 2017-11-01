@@ -15,8 +15,11 @@ import { DashboardService } from './_service/dashboard.service';
 import * as fromRoot from './_store/index.reducers';
 import { EffectsModule } from '@ngrx/effects';
 import { DashboardEffects } from './_store/dashboard.effects';
-import {MnohubDatastore} from './_jsonapi-services/mnohub-datastore';
-import {HttpModule} from '@angular/http';
+import { MnohubDatastore } from './_jsonapi-services/mnohub-datastore';
+import { HttpModule } from '@angular/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { BasicAuthInterceptor } from './_interceptors/basic-auth-interceptor';
+import { JsonapiService } from './_service/jsonapi-service';
 
 const optionalImports = [];
 if (!environment.production) {
@@ -28,6 +31,7 @@ if (!environment.production) {
   imports: [
     CommonModule,
     HttpModule,
+    HttpClientModule,
     StoreModule.forRoot(fromRoot.reducers),
     EffectsModule.forRoot([DashboardEffects]),
     GridsterModule,
@@ -36,8 +40,10 @@ if (!environment.production) {
   ],
   declarations: [ ContainerComponent, DashboardComponent, WidgetComponent ],
   providers: [
+    JsonapiService,
     DashboardService,
-    MnohubDatastore
+    MnohubDatastore,
+    { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
   ],
   exports: [ ContainerComponent, DashboardComponent ]
 })

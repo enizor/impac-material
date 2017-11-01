@@ -1,5 +1,5 @@
 import { Headers } from '@angular/http';
-import { Attribute, JsonApiModel } from 'angular2-jsonapi';
+import {Attribute, JsonApiModel, ModelType} from 'angular2-jsonapi';
 import { MnohubDatastore } from '../mnohub-datastore';
 import { appInjector } from '../../_helpers/app-injector';
 
