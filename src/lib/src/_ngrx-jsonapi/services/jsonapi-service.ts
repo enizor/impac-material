@@ -35,6 +35,20 @@ export class JsonapiService {
       .catch(error => this.handleError(error));
   }
 
+  private getDirtyAttributes(attributesMetadata: any): { string: any} {
+    let dirtyData: any = {};
+    for (let propertyName in attributesMetadata) {
+      if (attributesMetadata.hasOwnProperty(propertyName)) {
+        let metadata: any = attributesMetadata[propertyName];
+        if (metadata.hasDirtyAttributes) {
+          let attributeName = metadata.serializedName != null ? metadata.serializedName : propertyName;
+          dirtyData[attributeName] = metadata.serialisationValue ? metadata.serialisationValue : metadata.newValue;
+        }
+      }
+    }
+    return dirtyData;
+  }
+
   /**
    * Save a record in the API
    * @param model Model type to delete
@@ -87,79 +101,12 @@ export class JsonapiService {
     return this.http.delete(url).catch(error => this.handleError(error));
   }
 
-  protected handleError(error: any): ErrorObservable {
-    let errMsg: string = (error.message) ? error.message :
-      error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-
-    if (error.error && error.error.errors && error.error.errors instanceof Array) {
-      let errors: ErrorResponse = new ErrorResponse(error.error.errors);
-      console.error(errMsg, errors);
-      return Observable.throw(errors);
-    }
-
-    console.error(errMsg);
-    return Observable.throw(errMsg);
-  }
-
   private buildUrl<T extends JsonApiModel>(modelType: ModelType<T>, params?: any, id?: string): string {
     const queryParams: string = this.toQueryString(params);
     const modelConfig: ModelConfig = Reflect.getMetadata('JsonApiModelConfig', modelType);
     const url: string = [this.baseUrl, modelConfig.type, id].filter(x => x).join('/');
 
     return queryParams ? `${url}?${queryParams}` : url;
-  }
-
-  private toQueryString(params: any) {
-    return qs.stringify(params, { arrayFormat: 'brackets' });
-  }
-
-  private extractQueryData<T extends JsonApiModel>(res: any, model: T, withMeta = false): T[] | JsonApiQueryData<T> {
-    const models: T[] = [];
-
-    res.data.forEach((data: any) => {
-      const m: T = this.deserializeModel(model, data);
-
-      if (res.included) {
-        m.syncRelationships(data, res.included, 0);
-      }
-
-      models.push(m);
-    });
-
-    if (withMeta && withMeta === true) {
-      return new JsonApiQueryData(models, this.parseMeta(res, model));
-    } else {
-      return models;
-    }
-  }
-
-  private extractRecordData<T extends JsonApiModel>(res: HttpResponse, modelType: ModelType<T>, model?: T): T {
-    let body: any = res.body;
-    if (!body) {
-      throw new Error('no body in response');
-    }
-    model = this.deserializeModel(modelType, body.data);
-    if (body.included) {
-      model.syncRelationships(body.data, body.included, 0);
-    }
-    return model;
-  }
-
-  protected parseMeta(body: any, modelType: ModelType<JsonApiModel>): any {
-    const metaModel: any = Reflect.getMetadata('JsonApiModelConfig', modelType).meta;
-    const jsonApiMeta = new metaModel();
-
-    for (const key in body) {
-      if (jsonApiMeta.hasOwnProperty(key)) {
-        jsonApiMeta[key] = body[key];
-      }
-    }
-    return jsonApiMeta;
-  }
-
-  private deserializeModel<T extends JsonApiModel>(modelType: ModelType<T>, data: any) {
-    data.attributes = this.transformSerializedNamesToPropertyNames(modelType, data.attributes);
-    return new modelType(data);
   }
 
   private getRelationships(data: any): any {
@@ -182,6 +129,12 @@ export class JsonapiService {
     return relationships;
   }
 
+  private isValidToManyRelation(objects: Array<any>): boolean {
+    let isJsonApiModel = objects.every(item => item instanceof JsonApiModel);
+    let relationshipType: string = isJsonApiModel ? objects[0].modelConfig.type : '';
+    return isJsonApiModel ? objects.every((item: JsonApiModel) => item.modelConfig.type === relationshipType) : false;
+  }
+
   private buildSingleRelationshipData(model: JsonApiModel): any {
     let relationshipType: string = model.modelConfig.type;
     let relationShipData: { type: string, id?: string, attributes?: any } = {type: relationshipType};
@@ -194,24 +147,71 @@ export class JsonapiService {
     return relationShipData;
   }
 
-  private isValidToManyRelation(objects: Array<any>): boolean {
-    let isJsonApiModel = objects.every(item => item instanceof JsonApiModel);
-    let relationshipType: string = isJsonApiModel ? objects[0].modelConfig.type : '';
-    return isJsonApiModel ? objects.every((item: JsonApiModel) => item.modelConfig.type === relationshipType) : false;
+  private extractQueryData<T extends JsonApiModel>(res: any, model: T, withMeta = false): T[] | JsonApiQueryData<T> {
+    const models: T[] = [];
+
+    res.data.forEach((data: any) => {
+      const m: T = this.deserializeModel(model, data);
+
+      if (res.included) {
+        m.syncRelationships(data, res.included, 0);
+      }
+
+      models.push(m);
+    });
+
+    if (withMeta && withMeta === true) {
+      return new JsonApiQueryData(models, this.parseMeta(res, model));
+    } else {
+      return models;
+    }
   }
 
-  private getDirtyAttributes(attributesMetadata: any): { string: any} {
-    let dirtyData: any = {};
-    for (let propertyName in attributesMetadata) {
-      if (attributesMetadata.hasOwnProperty(propertyName)) {
-        let metadata: any = attributesMetadata[propertyName];
-        if (metadata.hasDirtyAttributes) {
-          let attributeName = metadata.serializedName != null ? metadata.serializedName : propertyName;
-          dirtyData[attributeName] = metadata.serialisationValue ? metadata.serialisationValue : metadata.newValue;
-        }
+  private deserializeModel<T extends JsonApiModel>(modelType: ModelType<T>, data: any) {
+    data.attributes = this.transformSerializedNamesToPropertyNames(modelType, data.attributes);
+    return new modelType(data);
+  }
+
+  private extractRecordData<T extends JsonApiModel>(res: HttpResponse, modelType: ModelType<T>, model?: T): T {
+    let body: any = res.body;
+    if (!body) {
+      throw new Error('no body in response');
+    }
+    model = this.deserializeModel(modelType, body.data);
+    if (body.included) {
+      model.syncRelationships(body.data, body.included, 0);
+    }
+    return model;
+  }
+
+  protected handleError(error: any): ErrorObservable {
+    let errMsg: string = (error.message) ? error.message :
+      error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+
+    if (error.error && error.error.errors && error.error.errors instanceof Array) {
+      let errors: ErrorResponse = new ErrorResponse(error.error.errors);
+      console.error(errMsg, errors);
+      return Observable.throw(errors);
+    }
+
+    console.error(errMsg);
+    return Observable.throw(errMsg);
+  }
+
+  protected parseMeta(body: any, modelType: ModelType<JsonApiModel>): any {
+    const metaModel: any = Reflect.getMetadata('JsonApiModelConfig', modelType).meta;
+    const jsonApiMeta = new metaModel();
+
+    for (const key in body) {
+      if (jsonApiMeta.hasOwnProperty(key)) {
+        jsonApiMeta[key] = body[key];
       }
     }
-    return dirtyData;
+    return jsonApiMeta;
+  }
+
+  private toQueryString(params: any) {
+    return qs.stringify(params, { arrayFormat: 'brackets' });
   }
 
   private resetMetadataAttributes<T extends JsonApiModel>(res: T, attributesMetadata: any) {
@@ -258,7 +258,7 @@ export class JsonapiService {
     return properties;
   }
 
-  private getModelPropertyNames<T extends JsonApiModel>(model: T) {
+  private getModelPropertyNames(model: JsonApiModel) {
     return Reflect.getMetadata('AttributeMapping', model);
   }
 
