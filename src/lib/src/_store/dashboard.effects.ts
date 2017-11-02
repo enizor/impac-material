@@ -39,6 +39,16 @@ export class DashboardEffects {
         .catch((error) => of({ type: DashboardAction.CREATE_ERROR, payload: error }));
     });
 
+  @Effect() remove$: Observable<Action> = this.actions$.ofType(DashboardAction.REMOVE)
+    .mergeMap((action: DashboardAction.Remove) => {
+      // Delete a dashboard in the backend
+      return this.jsonapiService.deleteRecord(Dashboard, action.payload.id)
+        // If successful, dispatch success action with deleted object
+        .map((data) => ({ type: DashboardAction.REMOVE_SUCCESS, payload: action.payload }))
+        // If request fails, dispatch error action
+        .catch((error) => of({ type: DashboardAction.REMOVE_ERROR, payload: error }));
+    });
+
   constructor(
     private actions$: Actions,
     private http: HttpClient,

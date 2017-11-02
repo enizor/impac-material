@@ -17,14 +17,25 @@ export class JsonapiService {
   }
 
   /**
-   * Find all the items from the API
-   * @param model Model type to fetch
-   * @param params (optional) List of additional parameters
+   * Find all the records from the API
+   * @param modelType Model type to fetch
+   * @param params (optional) Hash of additional parameters
    * @returns observable of fetched models
    */
-  public findAll<T extends JsonApiModel>(model: T, params?: any): Observable<T[]> {
-    const url: string = this.buildUrl(model, params);
-    return this.http.get(url).map((res: any) => this.extractQueryData(res, model));
+  public findAll<T extends JsonApiModel>(modelType: T, params?: any): Observable<T[]> {
+    const url: string = this.buildUrl(modelType, params);
+    return this.http.get(url).map((res: any) => this.extractQueryData(res, modelType));
+  }
+
+  /**
+   * Delete a record from the API
+   * @param modelType Model type to delete
+   * @param id Id of the record to delete
+   * @returns observable of fetched models
+   */
+  deleteRecord<T extends JsonApiModel>(modelType: T, id: string): Observable<Response> {
+    let url: string = this.buildUrl(modelType, null, id);
+    return this.http.delete(url);
   }
 
   private buildUrl<T extends JsonApiModel>(model: T, params?: any, id?: string): string {
