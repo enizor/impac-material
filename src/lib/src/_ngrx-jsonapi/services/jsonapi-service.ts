@@ -3,13 +3,15 @@ import 'rxjs/add/observable/throw';
 import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import * as qs from 'qs';
 import find from 'lodash-es/find';
 import { ModelConfig} from '../interfaces/model-config.interface';
 import { JsonApiModel } from '../models/json-api.model';
 import { JsonApiQueryData } from '../models/json-api-query-data';
 import { ErrorResponse } from '../models/error-response.model';
+
+export type ModelType<T extends JsonApiModel> = { new(data: any): T; };
 
 @Injectable()
 export class JsonapiService {
@@ -26,10 +28,10 @@ export class JsonapiService {
    * @param params (optional) Hash of additional parameters
    * @returns observable of fetched models
    */
-  public findAll<T extends JsonApiModel>(model: T, params?: any): Observable<T[]> {
-    const url: string = this.buildUrl(model, params);
+  public findAll<T extends JsonApiModel>(modelType: ModelType<T>, params?: any): Observable<T[]> {
+    const url: string = this.buildUrl(modelType, params);
     return this.http.get(url)
-      .map((res: any) => this.extractQueryData(res, model))
+      .map((res: any) => this.extractQueryData(res, modelType))
       .catch(error => this.handleError(error));
   }
 
@@ -41,12 +43,13 @@ export class JsonapiService {
    */
   public saveRecord<T extends JsonApiModel>(model: T, params?: any): Observable<T> {
     let attributesMetadata: any = Reflect.getMetadata('Attribute', model);
+    let modelType = <ModelType<T>>model.constructor;
     const modelConfig: ModelConfig = model.modelConfig;
     let typeName: string = modelConfig.type;
     let relationships: any = this.getRelationships(model);
-    let url: string = this.buildUrl(model, params, model.id);
-    let httpCall: Observable<Response>;
+    let url: string = this.buildUrl(modelType, params, model.id);
 
+    let httpCall: Observable<Object>;
     let body: any = {
       data: {
         id: model.id,
@@ -57,13 +60,17 @@ export class JsonapiService {
     };
 
     if (model.id) {
-      httpCall = this.http.patch(url, body);
+      httpCall = this.http.patch(url, body, {observe: 'response'});
     } else {
-      httpCall = this.http.post(url, body);
+      httpCall = this.http.post(url, body, {observe: 'response'});
     }
 
     return httpCall
-      .map(res => res.status === 201 ? this.extractRecordData(res, model) : model)
+      .map(res => (res.status === 201 ? this.extractRecordData(res, modelType, model) : model))
+      .catch(error => {
+        console.error(error);
+        return Observable.of(model);
+      })
       .map(res => this.resetMetadataAttributes(res, attributesMetadata))
       // .map(res => this.updateRelationships(res, relationships));
       .catch(error => this.handleError(error));
@@ -94,9 +101,9 @@ export class JsonapiService {
     return Observable.throw(errMsg);
   }
 
-  private buildUrl<T extends JsonApiModel>(model: T, params?: any, id?: string): string {
+  private buildUrl<T extends JsonApiModel>(modelType: ModelType<T>, params?: any, id?: string): string {
     const queryParams: string = this.toQueryString(params);
-    const modelConfig: ModelConfig = model.modelConfig || Reflect.getMetadata('JsonApiModelConfig', model);
+    const modelConfig: ModelConfig = Reflect.getMetadata('JsonApiModelConfig', modelType);
     const url: string = [this.baseUrl, modelConfig.type, id].filter(x => x).join('/');
 
     return queryParams ? `${url}?${queryParams}` : url;
@@ -126,8 +133,24 @@ export class JsonapiService {
     }
   }
 
-  protected parseMeta(body: any, model: JsonApiModel): any {
-    const metaModel: any = Reflect.getMetadata('JsonApiModelConfig', model).meta;
+  private extractRecordData<T extends JsonApiModel>(res: HttpResponse, modelType: ModelType<T>, model?: T): T {
+    let body: any = res.body;
+    if (!body) {
+      throw new Error('no body in response');
+    }
+    if (model) {
+      model.id = body.data.id;
+      Object.assign(model, body.data.attributes);
+    }
+    model = model || this.deserializeModel(modelType, body.data);
+    if (body.included) {
+      model.syncRelationships(body.data, body.included, 0);
+    }
+    return model;
+  }
+
+  protected parseMeta(body: any, modelType: ModelType<JsonApiModel>): any {
+    const metaModel: any = Reflect.getMetadata('JsonApiModelConfig', modelType).meta;
     const jsonApiMeta = new metaModel();
 
     for (const key in body) {
@@ -138,9 +161,9 @@ export class JsonapiService {
     return jsonApiMeta;
   }
 
-  private deserializeModel<T extends JsonApiModel>(model: T, data: any) {
-    data.attributes = this.transformSerializedNamesToPropertyNames(model, data.attributes);
-    return new model(data);
+  private deserializeModel<T extends JsonApiModel>(modelType: ModelType<T>, data: any) {
+    data.attributes = this.transformSerializedNamesToPropertyNames(modelType, data.attributes);
+    return new modelType(data);
   }
 
   private getRelationships(data: any): any {
@@ -195,24 +218,6 @@ export class JsonapiService {
     return dirtyData;
   }
 
-  private extractRecordData<T extends JsonApiModel>(res: any, model?: T): T {
-    if (!res) {
-      throw new Error('no body in response');
-    }
-
-    if (model) {
-      model.id = res.data.id;
-      Object.assign(model, res.data.attributes);
-    }
-
-    model = this.deserializeModel(model, res.data);
-
-    if (res.included) {
-      model.syncRelationships(res.data, res.included, 0);
-    }
-    return model;
-  }
-
   private resetMetadataAttributes<T extends JsonApiModel>(res: T, attributesMetadata: any) {
     attributesMetadata = Reflect.getMetadata('Attribute', res);
     for (let propertyName in attributesMetadata) {
@@ -246,7 +251,7 @@ export class JsonapiService {
     return model;
   };
 
-  private transformSerializedNamesToPropertyNames<T>(model: T, attributes: any) {
+  private transformSerializedNamesToPropertyNames<T extends JsonApiModel>(model: T, attributes: any) {
     const serializedNameToPropertyName = this.getModelPropertyNames(model.prototype);
     const properties: any = {};
     Object.keys(serializedNameToPropertyName).forEach(serializedName => {
@@ -257,7 +262,7 @@ export class JsonapiService {
     return properties;
   }
 
-  private getModelPropertyNames(model: JsonApiModel) {
+  private getModelPropertyNames<T extends JsonApiModel>(model: T) {
     return Reflect.getMetadata('AttributeMapping', model);
   }
 
