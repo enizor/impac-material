@@ -138,11 +138,7 @@ export class JsonapiService {
     if (!body) {
       throw new Error('no body in response');
     }
-    if (model) {
-      model.id = body.data.id;
-      Object.assign(model, body.data.attributes);
-    }
-    model = model || this.deserializeModel(modelType, body.data);
+    model = this.deserializeModel(modelType, body.data);
     if (body.included) {
       model.syncRelationships(body.data, body.included, 0);
     }
@@ -251,8 +247,8 @@ export class JsonapiService {
     return model;
   };
 
-  private transformSerializedNamesToPropertyNames<T extends JsonApiModel>(model: T, attributes: any) {
-    const serializedNameToPropertyName = this.getModelPropertyNames(model.prototype);
+  private transformSerializedNamesToPropertyNames<T extends JsonApiModel>(modelType: ModelType<T>, attributes: any) {
+    const serializedNameToPropertyName = this.getModelPropertyNames(modelType.prototype);
     const properties: any = {};
     Object.keys(serializedNameToPropertyName).forEach(serializedName => {
       if (attributes[serializedName]) {
