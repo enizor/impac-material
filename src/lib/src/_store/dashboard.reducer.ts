@@ -14,15 +14,16 @@ export function reducer(state: Array<Dashboard>, action: DashboardActions.All): 
     case DashboardActions.INIT_ERROR:
       return state;
 
-    case DashboardActions.CREATE:
-      return state;
-
     case DashboardActions.CREATE_SUCCESS:
       console.log('### DEBUG CREATE_SUCCESS', (<DashboardActions.CreateSuccess>action).payload);
       return [
         ...state,
         (<DashboardActions.CreateSuccess>action).payload
       ];
+
+    case DashboardActions.CREATE_ERROR:
+      console.log('### DEBUG CREATE_ERROR error', (<DashboardActions.CreateError>action).payload);
+      return state;
 
     case DashboardActions.REMOVE:
       return state;

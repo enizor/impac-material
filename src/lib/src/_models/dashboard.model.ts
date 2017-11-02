@@ -10,11 +10,11 @@ export class Dashboard extends JsonApiModel {
   @Attribute()
   name: string;
 
-  @Attribute()
-  created_at: Date;
+  @Attribute('created_at')
+  createdAt?: Date;
 
-  @Attribute()
-  updated_at: Date;
+  @Attribute('updated_at')
+  updatedAt?: Date;
 
   // widgets_order?: any;
   // currency?: string;

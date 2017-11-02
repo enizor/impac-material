@@ -24,7 +24,7 @@ export class ContainerComponent implements OnInit {
 
   createDashboard() {
     console.log('### createDashboard');
-    this.store.dispatch({ type: CREATE, payload: {name: 'Accounting Dashboard'} });
+    this.store.dispatch({ type: CREATE, payload: Object.assign(new Dashboard(), {name: 'Accounting Dashboard'}) });
   }
 
   deleteDashboard(dashboard: Dashboard) {
