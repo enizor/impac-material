@@ -11,7 +11,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 
 import { environment } from '../../environments/environment';
 import { appInjector } from './_helpers/app-injector';
-import { ContainerComponent } from './container/container.component';
+import { DashboardSelectorComponent } from './dashboard-selector/dashboard-selector.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { WidgetComponent } from './widget/widget.component';
 import { DashboardService } from './_service/dashboard.service';
@@ -38,14 +38,14 @@ if (!environment.production) {
     TabsModule.forRoot(),
     ...optionalImports
   ],
-  declarations: [ ContainerComponent, DashboardComponent, WidgetComponent ],
+  declarations: [ DashboardSelectorComponent, DashboardComponent, WidgetComponent ],
   providers: [
     JsonapiService,
     MnohubService,
     DashboardService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
   ],
-  exports: [ ContainerComponent, DashboardComponent ]
+  exports: [ DashboardSelectorComponent, DashboardComponent ]
 })
 export class ImpacMaterialModule {
   constructor(private injector: Injector) {

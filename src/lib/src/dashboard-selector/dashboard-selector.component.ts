@@ -7,12 +7,12 @@ import * as fromRoot from '../_store/index.reducers';
 import { Dashboard } from '../_models/dashboard.model';
 
 @Component({
-  selector: 'impac-container',
-  templateUrl: './container.component.html',
-  styleUrls: ['./container.component.scss'],
+  selector: 'impac-dashboard-selector',
+  templateUrl: './dashboard-selector.component.html',
+  styleUrls: ['./dashboard-selector.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ContainerComponent implements OnInit {
+export class DashboardSelectorComponent implements OnInit {
   dashboards$: Observable<Dashboard[]>;
 
   constructor(private store: Store<fromRoot.State>) {}
