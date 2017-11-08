@@ -1,6 +1,8 @@
-import { JsonApiModelConfig } from '../_ngrx-jsonapi/decorators/json-api-model-config';
+import { JsonApiModelConfig } from '../_ngrx-jsonapi/decorators/json-api-model-config.decorator';
 import { JsonApiModel } from '../_ngrx-jsonapi/models/json-api.model';
 import { Attribute } from '../_ngrx-jsonapi/decorators/attribute.decorator';
+import { HasMany } from '../_ngrx-jsonapi/decorators/has-many.decorator';
+import { Widget } from './widget.model';
 
 @JsonApiModelConfig({
   type: 'dashboards'
@@ -15,6 +17,9 @@ export class Dashboard extends JsonApiModel {
 
   @Attribute('updated_at')
   updatedAt?: Date;
+
+  @HasMany()
+  widgets: Widget[];
 
   // widgets_order?: any;
   // currency?: string;

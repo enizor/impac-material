@@ -1,7 +1,10 @@
 import { Injector, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpModule } from '@angular/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule, StoreDevtoolsOptions } from '@ngrx/store-devtools';
 import { GridsterModule } from 'angular-gridster2/dist/index';
 import { TabsModule } from 'ngx-bootstrap/tabs';
@@ -13,12 +16,10 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { WidgetComponent } from './widget/widget.component';
 import { DashboardService } from './_service/dashboard.service';
 import * as fromRoot from './_store/index.reducers';
-import { EffectsModule } from '@ngrx/effects';
 import { DashboardEffects } from './_store/dashboard.effects';
-import { HttpModule } from '@angular/http';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BasicAuthInterceptor } from './_interceptors/basic-auth-interceptor';
 import { JsonapiService } from './_ngrx-jsonapi/services/jsonapi-service';
+import { MnohubService } from './_service/mnohub-service';
 
 const optionalImports = [];
 if (!environment.production) {
@@ -40,6 +41,7 @@ if (!environment.production) {
   declarations: [ ContainerComponent, DashboardComponent, WidgetComponent ],
   providers: [
     JsonapiService,
+    MnohubService,
     DashboardService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
   ],

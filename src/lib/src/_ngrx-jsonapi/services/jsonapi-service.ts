@@ -11,7 +11,7 @@ import { JsonApiModel } from '../models/json-api.model';
 import { JsonApiQueryData } from '../models/json-api-query-data';
 import { ErrorResponse } from '../models/error-response.model';
 
-export type ModelType<T extends JsonApiModel> = { new(data: any): T; };
+export interface ModelType<T extends JsonApiModel> { new(data: any): T; }
 
 @Injectable()
 export class JsonapiService {
@@ -154,7 +154,7 @@ export class JsonapiService {
       const m: T = this.deserializeModel(model, data);
 
       if (res.included) {
-        m.syncRelationships(data, res.included, 0);
+        m.syncRelationships(data, res.included, 0, this);
       }
 
       models.push(m);
@@ -179,7 +179,7 @@ export class JsonapiService {
     }
     model = this.deserializeModel(modelType, body.data);
     if (body.included) {
-      model.syncRelationships(body.data, body.included, 0);
+      model.syncRelationships(body.data, body.included, 0, this);
     }
     return model;
   }
@@ -202,7 +202,7 @@ export class JsonapiService {
     const metaModel: any = Reflect.getMetadata('JsonApiModelConfig', modelType).meta;
     const jsonApiMeta = new metaModel();
 
-    for (const key in body) {
+    for (let key in body) {
       if (jsonApiMeta.hasOwnProperty(key)) {
         jsonApiMeta[key] = body[key];
       }

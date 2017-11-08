@@ -8,8 +8,8 @@ import { Action } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
 import * as DashboardAction from './dashboard.actions';
 import { Dashboard } from '../_models/dashboard.model';
-import { JsonapiService } from '../_ngrx-jsonapi/services/jsonapi-service';
-import {ErrorResponse} from '../_ngrx-jsonapi/models/error-response.model';
+import { ErrorResponse } from '../_ngrx-jsonapi/models/error-response.model';
+import { MnohubService } from '../_service/mnohub-service';
 
 @Injectable()
 export class DashboardEffects {
@@ -17,7 +17,7 @@ export class DashboardEffects {
   @Effect() init$: Observable<Action> = this.actions$.ofType(DashboardAction.INIT)
     .mergeMap(() => {
       // Fetch the list of dashboards in the backend
-      return this.jsonapiService.findAll(Dashboard)
+      return this.mnohubService.findAll(Dashboard, {include: 'widgets'})
         // If successful, dispatch success action with result
         .map((res: any) => ({ type: DashboardAction.INIT_SUCCESS, payload: res }))
         // If request fails, dispatch error action
@@ -28,7 +28,7 @@ export class DashboardEffects {
   @Effect() create$: Observable<Action> = this.actions$.ofType(DashboardAction.CREATE)
     .mergeMap((action: DashboardAction.Create) => {
       // Create a new dashboard in the backend
-      return this.jsonapiService.saveRecord(action.payload)
+      return this.mnohubService.saveRecord(action.payload)
         // If successful, dispatch success action with result
         .map(data => ({ type: DashboardAction.CREATE_SUCCESS, payload: data }) )
         // If request fails, dispatch error action
@@ -38,7 +38,7 @@ export class DashboardEffects {
   @Effect() remove$: Observable<Action> = this.actions$.ofType(DashboardAction.REMOVE)
     .mergeMap((action: DashboardAction.Remove) => {
       // Delete a dashboard in the backend
-      return this.jsonapiService.deleteRecord(Dashboard, action.payload.id)
+      return this.mnohubService.deleteRecord(Dashboard, action.payload.id)
         // If successful, dispatch success action with deleted object
         .map((data) => ({ type: DashboardAction.REMOVE_SUCCESS, payload: action.payload }))
         // If request fails, dispatch error action
@@ -47,6 +47,6 @@ export class DashboardEffects {
 
   constructor(
     private actions$: Actions,
-    private jsonapiService: JsonapiService
+    private mnohubService: MnohubService
   ) {}
 }
