@@ -12,14 +12,16 @@ export class Dashboard extends JsonApiModel {
   @Attribute()
   name: string;
 
+  active?: boolean;
+
+  @HasMany()
+  widgets: Widget[];
+
   @Attribute('created_at')
   createdAt?: Date;
 
   @Attribute('updated_at')
   updatedAt?: Date;
-
-  @HasMany()
-  widgets: Widget[];
 
   // widgets_order?: any;
   // currency?: string;

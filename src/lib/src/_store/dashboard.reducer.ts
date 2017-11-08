@@ -8,8 +8,11 @@ export function reducer(state: Array<Dashboard>, action: DashboardActions.All): 
       return [];
 
     case DashboardActions.INIT_SUCCESS:
-      console.log('### DEBUG INIT_SUCCESS', (<DashboardActions.CreateSuccess>action).payload);
-      return [...state, ...(<DashboardActions.InitSuccess>action).payload];
+      const response = (<DashboardActions.InitSuccess>action).payload;
+      return [
+        Object.assign(new Dashboard(), response[0], { active: true }),
+        ...response.slice(1, response.length)
+      ];
 
     case DashboardActions.INIT_ERROR:
       return state;
@@ -24,6 +27,13 @@ export function reducer(state: Array<Dashboard>, action: DashboardActions.All): 
     case DashboardActions.CREATE_ERROR:
       console.log('### DEBUG CREATE_ERROR error', (<DashboardActions.CreateError>action).payload);
       return state;
+
+    case DashboardActions.SELECT:
+      let index = (<DashboardActions.Select>action).index;
+      return state.map((item) => {
+        if (item.id === index) { return Object.assign(new Dashboard(), item, { active: true }); }
+        return Object.assign(new Dashboard(), item, { active: false });
+      });
 
     case DashboardActions.REMOVE:
       return state;

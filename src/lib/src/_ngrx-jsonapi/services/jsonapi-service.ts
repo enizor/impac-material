@@ -1,4 +1,6 @@
+import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
@@ -80,7 +82,7 @@ export class JsonapiService {
     }
 
     return httpCall
-      .map(res => (res.status === 201 ? this.extractRecordData(res, modelType, model) : model))
+      .map((res: HttpResponse<any>) => (res.status === 201 ? this.extractRecordData(res, modelType, model) : model))
       .catch(error => {
         console.error(error);
         return Observable.of(model);
@@ -172,7 +174,7 @@ export class JsonapiService {
     return new modelType(data);
   }
 
-  private extractRecordData<T extends JsonApiModel>(res: HttpResponse, modelType: ModelType<T>, model?: T): T {
+  private extractRecordData<T extends JsonApiModel>(res: HttpResponse<any>, modelType: ModelType<T>, model?: T): T {
     let body: any = res.body;
     if (!body) {
       throw new Error('no body in response');

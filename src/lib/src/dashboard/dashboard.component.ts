@@ -1,8 +1,13 @@
+import 'rxjs/add/operator/find';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { GridsterConfig } from 'angular-gridster2';
+import { Store } from '@ngrx/store';
 
 import { DashboardService } from '../_service/dashboard.service';
 import { appInjector } from '../_helpers/app-injector';
+import * as fromRoot from '../_store/index.reducers';
+import { Observable } from 'rxjs/Observable';
+import { Dashboard } from '../_models/dashboard.model';
 
 @Component({
   selector: 'impac-dashboard',
@@ -11,11 +16,11 @@ import { appInjector } from '../_helpers/app-injector';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardComponent implements OnInit {
+  dashboard$: Observable<Dashboard>;
 
   options: GridsterConfig;
-  widgets: Array<Object>;
 
-  constructor(public dashboardService: DashboardService) {}
+  constructor(private store: Store<fromRoot.State>) {}
 
   static eventStop(item: any, scope: any) {
     // console.info('eventStop', item, scope);
@@ -30,6 +35,10 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.dashboard$ = this.store.select('dashboards').map((dashboards) =>
+      dashboards.find((d) => d.active)
+    );
+
     this.options = {
       gridType: 'verticalFixed',
       swap: true,
@@ -40,7 +49,8 @@ export class DashboardComponent implements OnInit {
       itemResizeCallback: this.itemResize,
       outerMargin: true,
       margin: 10,
-      maxCols: 24,
+      minCols: 8,
+      maxCols: 8,
       maxItemCols: 4,
       minItemCols: 1,
       maxItemRows: 4,
@@ -58,11 +68,6 @@ export class DashboardComponent implements OnInit {
         stop: DashboardComponent.eventStop
       }
     };
-
-    this.widgets = [
-      {cols: 2, rows: 1, y: 0, x: 0, title: 'Cashflow Balance', initCallback: DashboardComponent.itemInit},
-      {cols: 2, rows: 2, y: 0, x: 2, title: 'Payable / Receivable',  initCallback: DashboardComponent.itemInit}
-    ];
   }
 
   itemResize(item: any, scope: any) {

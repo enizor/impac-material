@@ -3,7 +3,7 @@ import { ModelConfig } from '../interfaces/model-config.interface';
 import { JsonapiService, ModelType } from '../services/jsonapi-service';
 
 export class JsonApiModel {
-  id: string;
+  id?: string;
   [key: string]: any;
 
   constructor(data?: any) {
@@ -13,10 +13,11 @@ export class JsonApiModel {
     }
   }
 
-  syncRelationships(data: any, included: any, level: number, service: JsonapiService): void {
+  // TODO: Move in JsonApiService
+  public syncRelationships(data: any, included: any, level: number, service: JsonapiService): void {
     if (data) {
       this.parseHasMany(data, included, level, service);
-      this.parseBelongsTo(data, included, level);
+      this.parseBelongsTo(data, included, level, service);
     }
   }
 

@@ -7,6 +7,7 @@ export const INIT_ERROR = '[DASHBOARD] Init error';
 export const CREATE = '[DASHBOARD] Create';
 export const CREATE_SUCCESS = '[DASHBOARD] Create success';
 export const CREATE_ERROR = '[DASHBOARD] Create error';
+export const SELECT = '[DASHBOARD] Select';
 export const REMOVE = '[DASHBOARD] Remove';
 export const REMOVE_SUCCESS = '[DASHBOARD] Remove success';
 export const REMOVE_ERROR = '[DASHBOARD] Remove error';
@@ -43,6 +44,12 @@ export class CreateError implements Action {
   constructor(public payload: any) {}
 }
 
+export class Select implements Action {
+  readonly type = SELECT;
+
+  constructor(public index: string) {}
+}
+
 export class Remove implements Action {
   readonly type = REMOVE;
 
@@ -65,6 +72,7 @@ export type All
   = Init
   | InitSuccess
   | InitError
+  | Select
   | Create
   | CreateSuccess
   | CreateError

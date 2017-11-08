@@ -1,8 +1,10 @@
 
-<div class="main-toolbar">
-  <gridster [options]="options">
-    <gridster-item [item]="widget" *ngFor="let widget of widgets">
-      <impac-widget [widget]="widget"></impac-widget>
-    </gridster-item>
-  </gridster>
+<div *ngIf="(dashboard$ | async) as dashboard">
+  <div class="main-toolbar">
+    <gridster [options]="options">
+      <gridster-item [item]="dashboard.widgets" *ngFor="let widget of dashboard.widgets">
+        <impac-widget [widget]="widget"></impac-widget>
+      </gridster-item>
+    </gridster>
+  </div>
 </div>
