@@ -14,7 +14,7 @@ import { appInjector } from './_helpers/app-injector';
 import { DashboardSelectorComponent } from './dashboard-selector/dashboard-selector.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { WidgetComponent } from './widget/widget.component';
-import { DashboardService } from './_service/dashboard.service';
+import { DashboardEventsService } from './_service/dashboard-events.service';
 import * as fromRoot from './_store/index.reducers';
 import { DashboardEffects } from './_store/dashboard.effects';
 import { BasicAuthInterceptor } from './_interceptors/basic-auth-interceptor';
@@ -42,7 +42,7 @@ if (!environment.production) {
   providers: [
     JsonapiService,
     MnohubService,
-    DashboardService,
+    DashboardEventsService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
   ],
   exports: [ DashboardSelectorComponent, DashboardComponent ]

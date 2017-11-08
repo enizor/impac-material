@@ -1,5 +1,5 @@
 import { AfterContentInit, Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
-import { DashboardService } from '../_service/dashboard.service';
+import { DashboardEventsService } from '../_service/dashboard-events.service';
 import { Subscription } from 'rxjs/Subscription';
 
 import * as Highcharts from 'highcharts';
@@ -18,7 +18,7 @@ export class WidgetComponent implements AfterContentInit, OnDestroy {
   chart: Highcharts.ChartObject;
   options: Highcharts.Options;
 
-  constructor(public dashboardService: DashboardService) {}
+  constructor(public dashboardService: DashboardEventsService) {}
 
   ngAfterContentInit() {
     this.options = {

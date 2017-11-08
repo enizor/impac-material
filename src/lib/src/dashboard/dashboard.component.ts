@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { GridsterConfig } from 'angular-gridster2';
 import { Store } from '@ngrx/store';
 
-import { DashboardService } from '../_service/dashboard.service';
+import { DashboardEventsService } from '../_service/dashboard-events.service';
 import { appInjector } from '../_helpers/app-injector';
 import * as fromRoot from '../_store/index.reducers';
 import { Observable } from 'rxjs/Observable';
@@ -71,8 +71,8 @@ export class DashboardComponent implements OnInit {
   }
 
   itemResize(item: any, scope: any) {
-    const dashboardService = appInjector().get(DashboardService);
-    dashboardService.redrawWidget(item);
+    const dashboardEvents = appInjector().get(DashboardEventsService);
+    dashboardEvents.redrawWidget(item);
   }
 
   changedOptions() {
