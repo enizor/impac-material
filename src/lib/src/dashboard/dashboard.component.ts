@@ -80,10 +80,10 @@ export class DashboardComponent implements OnInit {
   }
 
   removeItem(item: any) {
-    this.widgets.splice(this.widgets.indexOf(item), 1);
+
   }
 
   addItem() {
-    this.widgets.push({});
+
   }
 }
